@@ -1,20 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdahl <kdahl@student.21-school.ru>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/30 15:11:36 by kdahl             #+#    #+#             */
-/*   Updated: 2020/04/30 15:17:12 by kdahl            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-int	ft_toupper(int ch)
+static int		my_islower(int c)
 {
-	if (ch >= 97 && ch <= 122)
-		ch -= 32;
-	return (ch);
+	return (c >= 97 && c <= 122);
+}
+
+int				ft_toupper(int c)
+{
+	if (my_islower(c))
+		return (c + ('A' - 'a'));
+	return (c);
 }

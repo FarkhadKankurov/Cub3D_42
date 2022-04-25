@@ -1,39 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdahl <kdahl@student.21-school.ru>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/04 15:58:09 by kdahl             #+#    #+#             */
-/*   Updated: 2020/05/10 23:40:36 by kdahl            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t num)
+int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t			index;
-	unsigned char	*str1;
-	unsigned char	*str2;
-	int				res;
-
-	index = 0;
-	res = 0;
-	str1 = (unsigned char *)s1;
-	str2 = (unsigned char *)s2;
-	if (s1 == NULL || s2 == NULL)
-		return (0);
-	while (index < num && ((str1[index]) || (str2[index])))
+	if (*s1 == '\0' && *s2 == '\0')
+		return (*(unsigned char*)s1 - *(unsigned char*)s2);
+	while ((*s1 || *s2) && n)
 	{
-		if (str1[index] > str2[index])
-			return (str1[index] - str2[index]);
-		if (str1[index] < str2[index])
-			return (str1[index] - str2[index]);
-		if (str1[index] == str2[index])
-			res = 0;
-		index++;
+		if (*s1 == *s2)
+		{
+			s1++;
+			s2++;
+			n--;
+		}
+		else
+		{
+			if (*(unsigned char*)s1 - *(unsigned char*)s2 < 0)
+				return (-1);
+			if (*(unsigned char*)s1 - *(unsigned char*)s2 > 0)
+				return (1);
+			return (0);
+		}
 	}
-	return (res);
+	return (0);
 }

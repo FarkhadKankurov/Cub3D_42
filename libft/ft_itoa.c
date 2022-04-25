@@ -1,54 +1,68 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdahl <kdahl@student.21-school.ru>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/06 19:45:26 by kdahl             #+#    #+#             */
-/*   Updated: 2020/05/20 21:21:34 by kdahl            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-int		get_size(unsigned int num)
+static int		length_count(int n)
 {
-	unsigned int	size;
+	int length;
 
-	size = 0;
-	while (num >= 10)
+	length = 0;
+	n = n < 0 ? -n : n;
+	if (n == 0)
+		return (1);
+	while (n > 0)
 	{
-		num /= 10;
-		size++;
+		length++;
+		n /= 10;
 	}
-	return (size + 1);
+	return (length);
 }
 
-char	*ft_itoa(int n)
+static char		*ret_min_int(void)
 {
-	char			*str;
-	unsigned int	num;
-	unsigned int	index;
-	unsigned int	size;
+	char *ret;
 
-	if (n < 0)
-		num = (unsigned int)(n * -1);
-	else
-		num = (unsigned int)n;
-	size = (unsigned int)get_size(num);
-	if (!(str = (char *)malloc(sizeof(char) * (size + 1 + (n < 0 ? 1 : 0)))))
-		return (0);
-	if (n < 0 && (str[0] = '-'))
-		size++;
-	index = size - 1;
-	while (num >= 10)
-	{
-		str[index] = (char)(num % 10 + 48);
-		num /= 10;
-		index--;
-	}
-	str[index] = (char)(num % 10 + 48);
-	str[size] = '\0';
+	ret = ft_strdup("-2147483648");
+	return (ret);
+}
+
+static char		*ret_zero_value(char *str)
+{
+	str[0] = '0';
+	str[1] = '\0';
 	return (str);
+}
+
+static char		*calc_result(char *str, int temp, int length)
+{
+	while (temp > 0)
+	{
+		str[--length] = temp % 10 + '0';
+		temp /= 10;
+	}
+	return (str);
+}
+
+char			*ft_itoa(int n)
+{
+	int			temp;
+	int			length;
+	char		*str;
+
+	if (n == -2147483648)
+		return (ret_min_int());
+	length = length_count(n);
+	if (n < 0)
+	{
+		length++;
+		temp = -n;
+	}
+	else
+		temp = n;
+	if (!(str = (char*)malloc(sizeof(char) * (length + 1))))
+		return (NULL);
+	if (n == 0)
+		return (ret_zero_value(str));
+	if (n < 0)
+		str[0] = '-';
+	str[length] = 0;
+	return (calc_result(str, temp, length));
 }

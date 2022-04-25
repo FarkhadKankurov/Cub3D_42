@@ -1,20 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdahl <kdahl@student.21-school.ru>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/30 15:00:53 by kdahl             #+#    #+#             */
-/*   Updated: 2020/04/30 15:10:54 by kdahl            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-int	ft_tolower(int ch)
+static int		my_isupper(int c)
 {
-	if (ch >= 65 && ch <= 90)
-		ch += 32;
-	return (ch);
+	return (c >= 65 && c <= 90);
+}
+
+int				ft_tolower(int c)
+{
+	if (my_isupper(c))
+		return (c + 32);
+	return (c);
 }

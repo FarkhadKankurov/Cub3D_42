@@ -1,55 +1,50 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: kdahl <kdahl@student.21-school.ru>         +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/07/20 21:08:31 by kdahl             #+#    #+#              #
-#    Updated: 2020/10/03 19:51:39 by kdahl            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = cub3D
+SRCS =	screenshot.c main.c src/drawing/calc_params.c src/drawing/drawing.c \
+		src/drawing/ray_cast.c src/drawing/start_draw.c src/error_handling/close_app.c \
+		src/error_handling/error_texture.c src/moving/key_move.c src/moving/key_rotate.c \
+		src/sprites/draw_sprites.c src/sprites/sort_sprites.c src/utils/utils.c \
+		src/init_hero_position.c src/init_mlx_core.c src/init_textures.c \
+		validation/check_colors.c validation/check_path.c validation/check_resolution.c \
+		validation/find_sprites.c validation/start_check.c validation/validate_arg.c \
+		validation/error_handling/close_validation.c validation/utils/check_flags.c \
+		validation/utils/check_symbols.c validation/utils/ft_atoi_nospace.c \
+		validation/utils/gnl_loop_params.c validation/utils/init_map.c validation/utils/ft_nbr_len.c\
+		validation/utils/memory_free.c validation/check_path_utils.c
+MLX = -L. -lmlx -framework OpenGL -framework AppKit
+OBJS = $(SRCS:.c=.o)
 
-MLX = -lmlx -lm -framework OpenGL -framework AppKit
+CC = gcc
+RM = rm -f
+MLX				= mlx/libmlx.dylib
+LIBFT           = libft.a
 
-SRCS = 	gnl/get_next_line.c \
-		engine/arg_parser.c engine/draw.c engine/get_colors.c \
-		engine/keyboard.c engine/main.c engine/map_render.c \
-		engine/mapandplayer_parser.c engine/path2.c \
-		engine/print_error.c engine/rays.c engine/sprites.c \
-		engine/arg_parser_2.c engine/cub3d_engine.c \
-		engine/sprite_calc.c engine/bmp.c engine/mouse.c \
-		engine/shooting.c engine/bonus_textures.c engine/notifications.c
+OBJSRCS = $(SRCS:.c=.o)
 
-OBJS = $(SRCS:.c = .o)
+$(NAME) : $(SRCS)
+	@$(MAKE) -C ./libft
+	@$(MAKE) -C ./mlx
+	@rm -f screenshot.bmp
+	@rm -f cub3D
+	@gcc -Wall -Wextra -Werror $(SRCS) $(MLX) ./libft/libft.a -o $(NAME)
+	@mv mlx/libmlx.dylib libmlx.dylib
+	@echo "\033[33m[Done !]"
 
+all : $(NAME)
 
-CC = gcc -Wall -Wextra -Werror ${SRCS}
+clean :
+	rm -rf $(OBJSRCS)
+	$(MAKE) clean -C ./libft
+	$(MAKE) clean -C ./mlx
 
-all:	$(NAME)
+fclean : clean
+	$(MAKE) fclean -C ./libft
+	$(MAKE) clean -C ./mlx
+	rm -rf $(NAME)
+	rm -f libmlx.dylib
+	rm -f screenshot.bmp
 
-$(NAME):	$(OBJS)
-			@echo "\033[35m[MinilibX compilation...]"
-			@$(MAKE) -C ./minilibx
-			@echo "\033[33m[Libft compilation...]"
-			@$(MAKE) -C ./libft
-			@echo "\033[36m[Cub3D compilation...]"
-			$(CC) -L minilibx -L libft -lft -Ilibft -Iminilibx $(MLX) -lz ./libft/libft.a -o $(NAME)
-			cp minilibx/libmlx.dylib .
-			@echo "\033[32m[Done !]"
+re : fclean all
 
-clean:	
-		$(MAKE) clean -C ./libft
-
-fclean:	
-		rm -rf $(NAME)
-		$(MAKE) fclean -C ./libft
-		$(MAKE) clean -C ./minilibx
-		rm -rf libmlx.dylib
-		rm -f cub3D.bmp
-
-re:		fclean all
+bonus : $(NAME)
 
 .PHONY:	all clean fclean re

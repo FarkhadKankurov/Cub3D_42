@@ -1,42 +1,31 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kdahl <kdahl@student.21-school.ru>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/30 21:37:46 by kdahl             #+#    #+#             */
-/*   Updated: 2020/10/03 13:14:14 by kdahl            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 
-int	ft_atoi(char *str)
+static int		my_isspace(int c)
 {
-	int x;
-	int sum;
-	int minusorplus;
-	int counter;
+	return (c == 32 || (c >= 9 && c <= 13));
+}
 
-	sum = 0;
-	minusorplus = 1;
-	counter = 0;
-	while (*str == ' ' || *str == '\t')
+int				ft_atoi(char *str)
+{
+	int						is_negative;
+	unsigned long long int	result;
+
+	result = 0;
+	is_negative = 1;
+	while (my_isspace(*str + '\0'))
 		str++;
-	if (*str == '-')
-		minusorplus = -1;
 	if (*str == '-' || *str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
 	{
-		x = *str++ - 48;
-		sum = sum * 10 + x;
-		counter++;
+		if (*str == '-')
+			is_negative = -1;
+		str++;
 	}
-	if (counter < 1)
-		return (256);
-	if (counter >= 9)
-		return (100000);
-	return (sum * minusorplus);
+	while (ft_isdigit(*str + '\0'))
+	{
+		result = (result * 10) + (*str - 48);
+		str++;
+	}
+	if (result > 9223372036854775807)
+		return (is_negative == 1 ? -1 : 0);
+	return ((int)(result * is_negative));
 }
